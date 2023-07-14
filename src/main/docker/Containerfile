@@ -1,0 +1,6 @@
+FROM openjdk:11
+COPY import_tokens/StoredCredential /usr/src/google-cal-sync/import_tokens/
+COPY reader_tokens/StoredCredential /usr/src/google-cal-sync/reader_tokens/
+COPY ./target/google-cal-sync-1.0-SNAPSHOT-jar-with-dependencies.jar /usr/src/google-cal-sync/
+WORKDIR /usr/src/google-cal-sync
+CMD ["java", "-jar", "google-cal-sync-1.0-SNAPSHOT-jar-with-dependencies.jar"]
