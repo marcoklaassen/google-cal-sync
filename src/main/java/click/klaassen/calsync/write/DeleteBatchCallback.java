@@ -14,7 +14,7 @@ public class DeleteBatchCallback extends JsonBatchCallback<Void> {
 
         @Override
         public void onSuccess(Void unused, HttpHeaders httpHeaders) {
-            System.out.println("Delete batch executed successfully");
+            // System.out.println("Delete batch executed successfully");
         }
 
 }

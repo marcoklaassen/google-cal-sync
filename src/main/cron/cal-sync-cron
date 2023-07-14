@@ -1,0 +1,1 @@
+0 */2 * * * cd /usr/src/google-cal-sync && /usr/local/openjdk-11/bin/java -jar google-cal-sync-1.0-SNAPSHOT-jar-with-dependencies.jar >> /var/log/cron.log 2>&1

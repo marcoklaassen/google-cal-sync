@@ -1,6 +1,14 @@
 FROM openjdk:11
+
+# Copy App Resources
 COPY import_tokens/StoredCredential /usr/src/google-cal-sync/import_tokens/
 COPY reader_tokens/StoredCredential /usr/src/google-cal-sync/reader_tokens/
 COPY ./target/google-cal-sync-1.0-SNAPSHOT-jar-with-dependencies.jar /usr/src/google-cal-sync/
+
+# Configure Cronjob
+RUN apt-get update && apt-get install -y cron
+COPY src/main/cron/cal-sync-cron /etc/cron.d/cal-sync-cron
+RUN crontab /etc/cron.d/cal-sync-cron
+
 WORKDIR /usr/src/google-cal-sync
-CMD ["java", "-jar", "google-cal-sync-1.0-SNAPSHOT-jar-with-dependencies.jar"]
+CMD ["cron", "-f"]

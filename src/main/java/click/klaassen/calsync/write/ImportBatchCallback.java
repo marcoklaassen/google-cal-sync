@@ -14,7 +14,7 @@ public class ImportBatchCallback extends JsonBatchCallback<Event> {
 
         @Override
         public void onSuccess(Event event, HttpHeaders httpHeaders) {
-            System.out.printf("Insert batch executed successfully [%s]\n", event.getSummary());
+            // System.out.printf("Insert batch executed successfully [%s]\n", event.getSummary());
         }
 
 }

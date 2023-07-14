@@ -65,7 +65,7 @@ public class CalendarImportService {
         } else {
             System.out.printf("Upcoming events [%s]", items.size());
             for (Event e : items.stream().filter(filterDeclined).collect(Collectors.toList())) {
-                System.out.printf("%s (%s)\n", e.getSummary(), e.getStart());
+                // System.out.printf("%s (%s)\n", e.getSummary(), e.getStart());
                 try {
                     Event newEvent = buildSimpleEvent(e);
                     service.events().insert(CALENDAR_ID, newEvent).queue(batch, new ImportBatchCallback());
