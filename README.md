@@ -18,5 +18,4 @@ docker run google-cal-sync:0.1
 
 # ToDo
 
-* CronJob Execution in Container
 * Logging for production use
