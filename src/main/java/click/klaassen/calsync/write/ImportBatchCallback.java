@@ -4,17 +4,19 @@ import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
 import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.services.calendar.model.Event;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ImportBatchCallback extends JsonBatchCallback<Event> {
 
         @Override
         public void onFailure(GoogleJsonError googleJsonError, HttpHeaders httpHeaders) {
-            System.out.println(googleJsonError.getMessage());
+            log.error(googleJsonError.getMessage());
         }
 
         @Override
         public void onSuccess(Event event, HttpHeaders httpHeaders) {
-            // System.out.printf("Insert batch executed successfully [%s]\n", event.getSummary());
+            log.debug("Insert batch executed successfully [{}]", event.getSummary());
         }
 
 }

@@ -7,6 +7,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.Events;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@Slf4j
 public class CalendarImportService {
 
     private static final String CALENDAR_ID = "rq5cn77salqiv6iigd93j1d4nc@group.calendar.google.com";
@@ -38,7 +40,7 @@ public class CalendarImportService {
                 .setOrderBy("startTime")
                 .execute()
                 .getItems();
-        System.out.printf("Load %s events from target calendar for delete\n", items.size());
+        log.info("Load {} events from target calendar for delete", items.size());
         BatchRequest batch = service.batch();
         for (Event e : items) {
             try {
@@ -61,11 +63,11 @@ public class CalendarImportService {
         BatchRequest batch = service.batch();
         List<Event> items = events.getItems();
         if (items.isEmpty()) {
-            System.out.println("No upcoming events found.");
+            log.info("No upcoming events found.");
         } else {
-            System.out.printf("Upcoming events [%s]", items.size());
+            log.info("Upcoming events [{}]", items.size());
             for (Event e : items.stream().filter(filterDeclined).collect(Collectors.toList())) {
-                // System.out.printf("%s (%s)\n", e.getSummary(), e.getStart());
+                log.debug("{} ({})", e.getSummary(), e.getStart());
                 try {
                     Event newEvent = buildSimpleEvent(e);
                     service.events().insert(CALENDAR_ID, newEvent).queue(batch, new ImportBatchCallback());
