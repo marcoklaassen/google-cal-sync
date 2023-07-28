@@ -25,6 +25,16 @@ import java.util.List;
 public class AuthenticatorService {
 
     /**
+     * LocalServerReceiver Port.
+     */
+    public static final int PORT = 8888;
+
+    /**
+     * Authorization Code Installed App UserId.
+     */
+    public static final String USER_ID = "user";
+
+    /**
      * Application name.
      */
     private final String APPLICATION_NAME;
@@ -77,7 +87,7 @@ public class AuthenticatorService {
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(PORT).build();
+        return new AuthorizationCodeInstalledApp(flow, receiver).authorize(USER_ID);
     }
 }

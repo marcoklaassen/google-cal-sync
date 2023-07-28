@@ -11,23 +11,29 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static java.util.Optional.*;
 
 @AllArgsConstructor
 @Slf4j
 public class CalendarImportService {
 
-    private static final String CALENDAR_ID = "rq5cn77salqiv6iigd93j1d4nc@group.calendar.google.com";
+    private static final String CALENDAR_ID = ofNullable(System.getenv("TARGET_CALENDAR_ID")).orElse("unknown_calendar_id");
+    public static final String START_TIME = "startTime";
+    public static final String DEFAULT_MEETING_TITLE = "Termin";
     private final Calendar service;
 
+    public static final String DECLINED_STATUS = "declined";
     private static final Predicate<? super Event> filterDeclined = event -> {
         if(event.getAttendees() == null || event.getAttendees().size() < 1){
             return true;
         }
         return event.getAttendees().stream().filter(EventAttendee::isSelf)
                 .map(EventAttendee::getResponseStatus)
-                .noneMatch(status -> status.equalsIgnoreCase("declined"));
+                .noneMatch(status -> status.equalsIgnoreCase(DECLINED_STATUS));
     };
 
     public void deleteEvents() throws IOException {
@@ -37,7 +43,7 @@ public class CalendarImportService {
                 .setTimeMax(Dates.TODAY_PLUS_ONE_MONTH)
                 .setMaxResults(2500)
                 .setSingleEvents(true)
-                .setOrderBy("startTime")
+                .setOrderBy(START_TIME)
                 .execute()
                 .getItems();
         log.info("Load {} events from target calendar for delete", items.size());
@@ -87,7 +93,7 @@ public class CalendarImportService {
 
     private Event buildSimpleEvent(Event originalEvent) {
         Event simpleEvent = new Event();
-        String meeting = "Termin";
+        String meeting = DEFAULT_MEETING_TITLE;
         if (originalEvent.getAttendees() != null && originalEvent.getAttendees().size() > 0) {
             meeting = "Meeting [" + originalEvent.getAttendees().size() + "]";
             meeting += originalEvent.getAttendees().stream().filter(EventAttendee::isSelf).map(eventAttendee -> "(" + eventAttendee.getResponseStatus() + ")").collect(Collectors.joining(","));
