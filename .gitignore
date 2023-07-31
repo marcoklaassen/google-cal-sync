@@ -5,3 +5,4 @@ import_tokens
 reader_tokens
 *-credentials.json
 config.private
+.java-version
