@@ -21,31 +21,25 @@ import static java.util.Optional.*;
 @Slf4j
 public class CalendarImportService {
 
-    private static final String CALENDAR_ID = ofNullable(System.getenv("TARGET_CALENDAR_ID")).orElse("unknown_calendar_id");
+    private static final String CALENDAR_ID = ofNullable(System.getenv("TARGET_CALENDAR_ID"))
+            .orElse("unknown_calendar_id");
     public static final String START_TIME = "startTime";
     public static final String DEFAULT_MEETING_TITLE = "Termin";
     private final Calendar service;
 
     public static final String DECLINED_STATUS = "declined";
     private static final Predicate<? super Event> filterDeclined = event -> {
-        if(event.getAttendees() == null || event.getAttendees().size() < 1){
+        if (event.getAttendees() == null || event.getAttendees().size() < 1) {
             return true;
         }
-        return event.getAttendees().stream().filter(EventAttendee::isSelf)
-                .map(EventAttendee::getResponseStatus)
+        return event.getAttendees().stream().filter(EventAttendee::isSelf).map(EventAttendee::getResponseStatus)
                 .noneMatch(status -> status.equalsIgnoreCase(DECLINED_STATUS));
     };
 
     public void deleteEvents() throws IOException {
-        List<Event> items = service.events()
-                .list(CALENDAR_ID)
-                .setTimeMin(Dates.START_OF_DAY)
-                .setTimeMax(Dates.TODAY_PLUS_ONE_MONTH)
-                .setMaxResults(2500)
-                .setSingleEvents(true)
-                .setOrderBy(START_TIME)
-                .execute()
-                .getItems();
+        List<Event> items = service.events().list(CALENDAR_ID).setTimeMin(Dates.START_OF_DAY)
+                .setTimeMax(Dates.TODAY_PLUS_ONE_MONTH).setMaxResults(2500).setSingleEvents(true).setOrderBy(START_TIME)
+                .execute().getItems();
         log.info("Load {} events from target calendar for delete", items.size());
         BatchRequest batch = service.batch();
         for (Event e : items) {
@@ -96,7 +90,9 @@ public class CalendarImportService {
         String meeting = DEFAULT_MEETING_TITLE;
         if (originalEvent.getAttendees() != null && originalEvent.getAttendees().size() > 0) {
             meeting = "Meeting [" + originalEvent.getAttendees().size() + "]";
-            meeting += originalEvent.getAttendees().stream().filter(EventAttendee::isSelf).map(eventAttendee -> "(" + eventAttendee.getResponseStatus() + ")").collect(Collectors.joining(","));
+            meeting += originalEvent.getAttendees().stream().filter(EventAttendee::isSelf)
+                    .map(eventAttendee -> "(" + eventAttendee.getResponseStatus() + ")")
+                    .collect(Collectors.joining(","));
         }
         simpleEvent.setSummary(meeting + ": " + originalEvent.getSummary());
         simpleEvent.setStart(originalEvent.getStart());

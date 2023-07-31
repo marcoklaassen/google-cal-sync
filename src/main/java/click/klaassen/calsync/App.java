@@ -28,13 +28,11 @@ public class App {
     private static final String READER_TOKENS_DIRECTORY_PATH = "reader_tokens";
 
     /**
-     * Global instance of the scopes required by this quickstart.
-     * If modifying these scopes, delete your previously saved tokens/ folder.
+     * Global instance of the scopes required by this quickstart. If modifying these scopes, delete your previously
+     * saved tokens/ folder.
      */
-    private static final List<String> READER_SCOPES =
-            Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
+    private static final List<String> READER_SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
     private static final String READER_CREDENTIALS_FILE_PATH = "/reader-credentials.json";
-
 
     /*
      * Writer Args
@@ -50,26 +48,18 @@ public class App {
     private static final String IMPORT_TOKENS_DIRECTORY_PATH = "import_tokens";
 
     /**
-     * Global instance of the scopes required by this quickstart.
-     * If modifying these scopes, delete your previously saved tokens/ folder.
+     * Global instance of the scopes required by this quickstart. If modifying these scopes, delete your previously
+     * saved tokens/ folder.
      */
-    private static final List<String> IMPORT_SCOPES =
-            Collections.singletonList(CalendarScopes.CALENDAR);
+    private static final List<String> IMPORT_SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
     private static final String IMPORT_CREDENTIALS_FILE_PATH = "/import-credentials.json";
 
-
     public static void main(String... args) throws GeneralSecurityException, IOException {
-        Calendar sourceCalendar = new AuthenticatorService(
-                READER_APP_NAME,
-                READER_TOKENS_DIRECTORY_PATH,
-                READER_SCOPES,
+        Calendar sourceCalendar = new AuthenticatorService(READER_APP_NAME, READER_TOKENS_DIRECTORY_PATH, READER_SCOPES,
                 READER_CREDENTIALS_FILE_PATH).getCalender();
 
-        Calendar targetCalendar = new AuthenticatorService(
-                IMPORT_APPLICATION_NAME,
-                IMPORT_TOKENS_DIRECTORY_PATH,
-                IMPORT_SCOPES,
-                IMPORT_CREDENTIALS_FILE_PATH).getCalender();
+        Calendar targetCalendar = new AuthenticatorService(IMPORT_APPLICATION_NAME, IMPORT_TOKENS_DIRECTORY_PATH,
+                IMPORT_SCOPES, IMPORT_CREDENTIALS_FILE_PATH).getCalender();
 
         CalendarImportService importService = new CalendarImportService(targetCalendar);
 

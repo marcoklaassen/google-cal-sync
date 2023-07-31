@@ -10,15 +10,14 @@ import lombok.extern.slf4j.Slf4j;
 
 public class DeleteBatchCallback extends JsonBatchCallback<Void> {
 
-        @Override
-        public void onFailure(GoogleJsonError googleJsonError, HttpHeaders httpHeaders) {
-            log.error(googleJsonError.getMessage());
-        }
+    @Override
+    public void onFailure(GoogleJsonError googleJsonError, HttpHeaders httpHeaders) {
+        log.error(googleJsonError.getMessage());
+    }
 
-        @Override
-        public void onSuccess(Void unused, HttpHeaders httpHeaders) {
-            log.debug("Delete batch executed successfully");
-        }
+    @Override
+    public void onSuccess(Void unused, HttpHeaders httpHeaders) {
+        log.debug("Delete batch executed successfully");
+    }
 
 }
-

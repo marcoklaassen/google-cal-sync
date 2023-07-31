@@ -50,8 +50,8 @@ public class AuthenticatorService {
     private final String TOKENS_DIRECTORY_PATH;
 
     /**
-     * Global instance of the scopes required by this quickstart.
-     * If modifying these scopes, delete your previously saved tokens/ folder.
+     * Global instance of the scopes required by this quickstart. If modifying these scopes, delete your previously
+     * saved tokens/ folder.
      */
     private final List<String> SCOPES;
     private final String CREDENTIALS_FILE_PATH;
@@ -60,33 +60,33 @@ public class AuthenticatorService {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                .setApplicationName(APPLICATION_NAME)
-                .build();
+                .setApplicationName(APPLICATION_NAME).build();
     }
 
     /**
      * Creates an authorized Credential object.
      *
-     * @param HTTP_TRANSPORT The network HTTP Transport.
+     * @param HTTP_TRANSPORT
+     *            The network HTTP Transport.
+     *
      * @return An authorized Credential object.
-     * @throws IOException If the reader-credentials.json file cannot be found.
+     *
+     * @throws IOException
+     *             If the reader-credentials.json file cannot be found.
      */
-    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT)
-            throws IOException {
+    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.
         InputStream in = App.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
         }
-        GoogleClientSecrets clientSecrets =
-                GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-                .setAccessType("offline")
-                .build();
+        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY,
+                clientSecrets, SCOPES)
+                        .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+                        .setAccessType("offline").build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(PORT).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize(USER_ID);
     }

@@ -9,15 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ImportBatchCallback extends JsonBatchCallback<Event> {
 
-        @Override
-        public void onFailure(GoogleJsonError googleJsonError, HttpHeaders httpHeaders) {
-            log.error(googleJsonError.getMessage());
-        }
+    @Override
+    public void onFailure(GoogleJsonError googleJsonError, HttpHeaders httpHeaders) {
+        log.error(googleJsonError.getMessage());
+    }
 
-        @Override
-        public void onSuccess(Event event, HttpHeaders httpHeaders) {
-            log.debug("Insert batch executed successfully [{}]", event.getSummary());
-        }
+    @Override
+    public void onSuccess(Event event, HttpHeaders httpHeaders) {
+        log.debug("Insert batch executed successfully [{}]", event.getSummary());
+    }
 
 }
-
