@@ -6,3 +6,4 @@ reader_tokens
 *-credentials.json
 config.private
 .java-version
+.env
