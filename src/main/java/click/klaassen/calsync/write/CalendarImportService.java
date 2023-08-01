@@ -1,5 +1,6 @@
 package click.klaassen.calsync.write;
 
+import click.klaassen.calsync.commons.AppProperties;
 import click.klaassen.calsync.commons.Dates;
 import com.google.api.client.googleapis.batch.BatchRequest;
 import com.google.api.services.calendar.Calendar;
@@ -14,14 +15,11 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.util.Optional.*;
-
 @AllArgsConstructor
 @Slf4j
 public class CalendarImportService {
 
-    private static final String CALENDAR_ID = ofNullable(System.getenv("TARGET_CALENDAR_ID"))
-            .orElse("unknown_calendar_id");
+    private static final String CALENDAR_ID = AppProperties.getTargetCalendarId();
     public static final String START_TIME = "startTime";
     public static final String DEFAULT_MEETING_TITLE = "Termin";
     private final Calendar service;
