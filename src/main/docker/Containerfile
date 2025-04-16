@@ -1,9 +1,9 @@
-FROM eclipse-temurin:17-jre-ubi9-minimal
+FROM eclipse-temurin:23-jre-ubi9-minimal
 
 # Copy App Resources
 COPY import_tokens/StoredCredential /usr/src/google-cal-sync/import_tokens/
 COPY reader_tokens/StoredCredential /usr/src/google-cal-sync/reader_tokens/
-COPY ./target/google-cal-sync-1.0-SNAPSHOT-jar-with-dependencies.jar /usr/src/google-cal-sync/
+COPY ./target/google-cal-sync-1.1-SNAPSHOT-jar-with-dependencies.jar /usr/src/google-cal-sync/
 COPY .env /usr/src/google-cal-sync/
 
 # Configure Cronjob

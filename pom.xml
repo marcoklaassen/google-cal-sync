@@ -16,6 +16,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>23</maven.compiler.source>
     <maven.compiler.target>23</maven.compiler.target>
+    <!-- full compilation processing in JDK23 to use Lombok -->
+    <maven.compiler.proc>full</maven.compiler.proc>
   </properties>
 
   <dependencies>

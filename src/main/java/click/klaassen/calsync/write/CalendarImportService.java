@@ -1,12 +1,12 @@
 package click.klaassen.calsync.write;
 
-import click.klaassen.calsync.commons.AppProperties;
 import click.klaassen.calsync.commons.Dates;
 import com.google.api.client.googleapis.batch.BatchRequest;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.Events;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Slf4j
-public class CalendarImportService {
+public abstract class CalendarImportService {
 
-    private static final String CALENDAR_ID = AppProperties.getTargetCalendarId();
-    public static final String START_TIME = "startTime";
-    public static final String DEFAULT_MEETING_TITLE = "Termin";
+    private final String CALENDAR_ID;
     private final Calendar service;
+
+    public static final String START_TIME = "startTime";
 
     public static final String DECLINED_STATUS = "declined";
     private static final Predicate<? super Event> filterDeclined = event -> {
@@ -67,7 +67,9 @@ public class CalendarImportService {
                 log.debug("{} ({})", e.getSummary(), e.getStart());
                 try {
                     Event newEvent = buildSimpleEvent(e);
-                    service.events().insert(CALENDAR_ID, newEvent).queue(batch, new ImportBatchCallback());
+                    if (newEvent != null) {
+                        service.events().insert(CALENDAR_ID, newEvent).queue(batch, new ImportBatchCallback());
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -82,19 +84,12 @@ public class CalendarImportService {
         }
     }
 
-    private Event buildSimpleEvent(Event originalEvent) {
-        Event simpleEvent = new Event();
-        String meeting = DEFAULT_MEETING_TITLE;
-        if (originalEvent.getAttendees() != null && originalEvent.getAttendees().size() > 0) {
-            meeting = "Meeting [" + originalEvent.getAttendees().size() + "]";
-            meeting += originalEvent.getAttendees().stream().filter(EventAttendee::isSelf)
-                    .map(eventAttendee -> "(" + eventAttendee.getResponseStatus() + ")")
-                    .collect(Collectors.joining(","));
-        }
-        simpleEvent.setSummary(meeting + ": " + originalEvent.getSummary());
-        simpleEvent.setStart(originalEvent.getStart());
-        simpleEvent.setEnd(originalEvent.getEnd());
-        simpleEvent.setLocation(originalEvent.getLocation());
-        return simpleEvent;
-    }
+    /**
+     * Builds a new event out of the original one.
+     *
+     * @param originalEvent
+     *
+     * @return null if the original event should not trigger an event in the target calendar or a new event
+     */
+    protected abstract Event buildSimpleEvent(Event originalEvent);
 }

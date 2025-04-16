@@ -2,7 +2,8 @@ package click.klaassen.calsync;
 
 import click.klaassen.calsync.auth.AuthenticatorService;
 import click.klaassen.calsync.reader.CalendarReadService;
-import click.klaassen.calsync.write.CalendarImportService;
+import click.klaassen.calsync.write.BusinessTripCalendarImportService;
+import click.klaassen.calsync.write.PrimaryCalendarImportService;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Events;
@@ -61,16 +62,19 @@ public class App {
         Calendar targetCalendar = new AuthenticatorService(IMPORT_APPLICATION_NAME, IMPORT_TOKENS_DIRECTORY_PATH,
                 IMPORT_SCOPES, IMPORT_CREDENTIALS_FILE_PATH).getCalender();
 
-        CalendarImportService importService = new CalendarImportService(targetCalendar);
+        var primaryImportService = new PrimaryCalendarImportService(targetCalendar);
+        var businessTripImportService = new BusinessTripCalendarImportService(targetCalendar);
 
         // Get Events from Source Calendar
         Events events = new CalendarReadService(sourceCalendar).readFutureEvents();
 
         // Delete existing events from Calendar
-        importService.deleteEvents();
+        primaryImportService.deleteEvents();
+        businessTripImportService.deleteEvents();
 
         // Add Events to Calendar
-        importService.importEvents(events);
+        primaryImportService.importEvents(events);
+        businessTripImportService.importEvents(events);
 
     }
 }

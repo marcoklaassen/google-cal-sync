@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Set;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,8 +27,17 @@ public class AppProperties {
         return getAppProperties().getProperty("SOURCE_CALENDAR_ID", "unknown_source_cal_id");
     }
 
-    public static String getTargetCalendarId() {
-        return getAppProperties().getProperty("TARGET_CALENDAR_ID", "unknown_target_cal_id");
+    public static String getTargetPrimaryCalendarId() {
+        return getAppProperties().getProperty("TARGET_PRIMARY_CALENDAR_ID", "unknown_target_primary_cal_id");
+    }
+
+    public static String getTargetBusinessCalendarId() {
+        return getAppProperties().getProperty("TARGET_BUSINESS_TRIP_CALENDAR_ID",
+                "unknown_target_business_trip_cal_id");
+    }
+
+    public static Set<String> getBusinessTravelIdentifiers() {
+        return Set.of(getAppProperties().getProperty("BUSINESS_TRIP_IDENTIFIERS", "").split(","));
     }
 
 }
