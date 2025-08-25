@@ -33,6 +33,10 @@ public abstract class CalendarImportService {
                 .noneMatch(status -> status.equalsIgnoreCase(DECLINED_STATUS));
     };
 
+    private static final Predicate<? super Event> filterHome = event -> {
+        return !event.getSummary().equals("Home");
+    };
+
     public void deleteEvents() throws IOException {
         List<Event> items = service.events().list(CALENDAR_ID).setTimeMin(Dates.START_OF_DAY)
                 .setTimeMax(Dates.TODAY_PLUS_ONE_MONTH).setMaxResults(2500).setSingleEvents(true).setOrderBy(START_TIME)
@@ -63,7 +67,7 @@ public abstract class CalendarImportService {
             log.info("No upcoming events found.");
         } else {
             log.info("Upcoming events [{}]", items.size());
-            for (Event e : items.stream().filter(filterDeclined).collect(Collectors.toList())) {
+            for (Event e : items.stream().filter(filterDeclined).filter(filterHome).collect(Collectors.toList())) {
                 log.debug("{} ({})", e.getSummary(), e.getStart());
                 try {
                     Event newEvent = buildSimpleEvent(e);
@@ -73,7 +77,7 @@ public abstract class CalendarImportService {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                if (batch.size() == 50) {
+                if (batch.size() == 10) {
                     batch.execute();
                     batch = service.batch();
                 }

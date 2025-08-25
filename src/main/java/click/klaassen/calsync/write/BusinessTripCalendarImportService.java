@@ -30,6 +30,7 @@ public class BusinessTripCalendarImportService extends CalendarImportService {
             simpleEvent.setEnd(originalEvent.getEnd());
             simpleEvent.setLocation(originalEvent.getLocation());
             simpleEvent.setReminders(new Event.Reminders().setUseDefault(false).setOverrides(null));
+            simpleEvent.setDescription("");
 
             return simpleEvent;
         }
