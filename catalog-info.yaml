@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: google-cal-sync
+  description: Sync Google Calendars
+spec:
+  type: service
+  lifecycle: production
+  owner: marcoklaassen
