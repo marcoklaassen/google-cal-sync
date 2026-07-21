@@ -20,6 +20,15 @@ There is a `.env.example` in this repository to demonstrate the usage of the .en
 The application uses this `.env` file to get the properties for the calendar ids. 
 The Containerfile copies this config file to the container.
 
+### Build Preps
+
+If you would like to copy your environment variables and tokens you can do it like this: 
+```
+scp -r .env user@server:/home/user/google-cal-sync
+scp -r reader_tokens/ user@server:/home/user/google-cal-sync
+scp -r import_tokens/ user@server:/home/user/google-cal-sync
+```
+
 ### Build Process
 
 ```
