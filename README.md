@@ -25,7 +25,7 @@ The Containerfile copies this config file to the container.
 ```
 mvn formatter:format
 mvn clean package
-podman build -f src/main/docker/Containerfile . -t google-cal-sync:0.3
+podman build -f src/main/docker/Containerfile . -t google-cal-sync:1.0
 ```
 
 ## Run as JAR
@@ -37,7 +37,7 @@ java -jar target/google-cal-sync-1.1-SNAPSHOT-jar-with-dependencies.jar
 ## Run as Container
 
 ```
-podman run --replace --name google-cal-sync google-cal-sync:0.3
+podman run --replace --name google-cal-sync google-cal-sync:1.0
 ```
 
 ## Debug
