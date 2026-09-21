@@ -77,7 +77,7 @@ public abstract class CalendarImportService {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                if (batch.size() == 10) {
+                if (batch.size() == 5) {
                     batch.execute();
                     batch = service.batch();
                 }
